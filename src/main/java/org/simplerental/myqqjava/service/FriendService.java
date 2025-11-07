@@ -51,6 +51,12 @@ public class FriendService {
 
         }
 
+    /**
+     * 创建双向好友关系列表
+     *
+     * @param friends 原始好友关系列表
+     * @return 双向好友关系列表
+     */
     public List<Friend> twoWayList(List<Friend> friends) {
         List<Friend> twoWayList = new ArrayList<>(friends);
 

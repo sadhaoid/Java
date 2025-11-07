@@ -10,13 +10,25 @@ import java.io.PrintWriter;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 处理发送消息请求
+ */
 @Service
 @RequiredArgsConstructor
 public class SendService {
     private final ClientService clientService;
     private final ChatHistoryService chatHistoryService;
 
-
+    /**
+     * 处理发送消息请求
+     *
+     * @param reader   输入流
+     * @param writer   输出流
+     * @param loginId  登录ID
+     * @param friendId 好友ID
+     * @param userMap  在线用户映射
+     * @throws IOException IO异常
+     */
     public void processSendMessage(BufferedReader reader, PrintWriter writer, String loginId, String friendId, Map<String, PrintWriter> userMap) throws IOException {
         String line;
         while((line = reader.readLine()) != null){

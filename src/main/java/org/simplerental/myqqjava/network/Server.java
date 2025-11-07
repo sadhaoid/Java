@@ -14,6 +14,12 @@ import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * TCP 服务器
+ *
+ * 监听8081端口，等待客户端连接
+ * 每当有客户端连接时，启动一个线程异步处理该客户端的请求
+ */
 @Component
 public class Server {
     public static final Map<String, PrintWriter> USER_MAP = new ConcurrentHashMap<>();
@@ -53,6 +59,10 @@ public class Server {
         }
     }
 
+    /**
+     * 处理客户端请求
+     * @param socket 与客户端通信的 Socket 对象
+     */
     private void clientHandler(Socket socket) {
         String loginId = null;
         try (InputStream inputStream = socket.getInputStream();
