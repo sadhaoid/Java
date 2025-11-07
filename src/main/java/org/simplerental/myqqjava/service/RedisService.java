@@ -37,16 +37,15 @@ public class RedisService {
 
     public boolean isUsers(String line) {
         if(isPositiveInteger(line)){
-            return redisTemplate.opsForSet().isMember(REDIS_KEY_USER_LIST, Long.valueOf(line));
+            return Boolean.TRUE.equals(redisTemplate.opsForSet().isMember(REDIS_KEY_USER_LIST, Long.valueOf(line)));
         }
         return false;
     }
 
     public boolean isFriends(String loginId, String friendId) {
-        if (isPositiveInteger(friendId)) {
-            return redisTemplate.opsForSet().isMember(REDIS_KEY_PREFIX_FRIEND_LIST + loginId, Long.valueOf(friendId));
-        }
-        return false;
+         return Boolean.TRUE.equals(redisTemplate.opsForSet().isMember(REDIS_KEY_PREFIX_FRIEND_LIST + loginId, Long.valueOf(friendId)));
+
+
     }
 
     public boolean isLogin(String loginId){
