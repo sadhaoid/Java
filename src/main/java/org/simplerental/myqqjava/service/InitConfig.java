@@ -9,7 +9,6 @@ import java.io.IOException;
 
 /**
  * 初始化配置服务
- *
  * 启动服务器并加载Redis数据
  */
 @Service
