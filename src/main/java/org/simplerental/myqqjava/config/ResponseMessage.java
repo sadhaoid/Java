@@ -19,8 +19,4 @@ public enum ResponseMessage {
     }
 
 
-//    public String getMessage() {
-//        return message;
-//    }
-
 }

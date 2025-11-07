@@ -22,6 +22,7 @@ public class Server {
     private final RedisService redisService;
     private final ChangeService changeService;
     private final SendService sendService;
+    private volatile boolean isRunning = true;
 
     public Server(@Value("${tcp.server.port}") int port, LoginService loginService, RedisService redisService, ChangeService changeService, SendService sendService) {
         this.port = port;
@@ -32,21 +33,24 @@ public class Server {
     }
 
     public void initServer() throws IOException {
-        ServerSocket serverSocket = new ServerSocket(port);
-        System.out.println("✅ TCP 服务启动，监听端口: " + port);
+        try(ServerSocket serverSocket = new ServerSocket(port)) {
+
+        System.out.println("✅ TCP 服务启动，监听端口: "+port);
         redisService.deleteLoginList();
 
-        while (true) {
-            Socket socket = serverSocket.accept();
-            System.out.println("来人了，要上班了");
+        while(isRunning)
 
-            // 客户端连接上来启动一个线程异步处理
-            new Thread(() -> clientHandler(socket)).start();
+            try {
+                Socket socket = serverSocket.accept();
+                System.out.println("来人了，要上班了");
 
+                // 客户端连接上来启动一个线程异步处理
+                new Thread(() -> clientHandler(socket)).start();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
 
         }
-
-
     }
 
     private void clientHandler(Socket socket) {
