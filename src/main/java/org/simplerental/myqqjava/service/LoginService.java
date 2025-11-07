@@ -12,6 +12,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class LoginService {
     private static final String LoginMessage = "请使用login ID登录即可";
+    private static final String LoginedMessage = "该用户已登录，请更换ID";
     private static final String LoginSucceed = "登录成功";
     public final ClientService clientService;
     public final RedisService redisService;
@@ -21,16 +22,19 @@ public class LoginService {
 
         String line;
         while ((line = reader.readLine()) != null) {
-            String loginID = clientService.parseLoginID(line);
+            String loginId = clientService.parseLoginId(line);
 
-            if (loginID.isEmpty()) {
+            if (loginId.isEmpty()) {
                 writer.println(LoginMessage);
-            }else {
+            } else if (redisService.isLogin(loginId)) {
+                writer.println(LoginedMessage);
+
+            } else {
                 writer.println(LoginSucceed);
-                userMap.put(loginID, writer);
-                redisService.insertLoginIdToRedis(loginID);
+                userMap.put(loginId, writer);
+                redisService.insertLoginIdToRedis(loginId);
                 System.out.println(userMap);
-                return loginID;
+                return loginId;
             }
         }
 

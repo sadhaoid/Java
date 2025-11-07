@@ -56,11 +56,11 @@ public class RedisService {
         return false;
     }
 
-    public void insertLoginIdToRedis(String loginID) {
-        redisTemplate.opsForSet().add(REDIS_KEY_LOGIN_LIST,  Long.valueOf(loginID));
+    public void insertLoginIdToRedis(String loginId) {
+        redisTemplate.opsForSet().add(REDIS_KEY_LOGIN_LIST,  Long.valueOf(loginId));
     }
-    public void deleteLoginIdFromRedis(String loginID){
-        redisTemplate.opsForSet().remove(REDIS_KEY_LOGIN_LIST,loginID);
+    public void deleteLoginIdFromRedis(String loginId){
+        redisTemplate.opsForSet().remove(REDIS_KEY_LOGIN_LIST,loginId);
     }
 
     public void saveFriendSetToRedis() {

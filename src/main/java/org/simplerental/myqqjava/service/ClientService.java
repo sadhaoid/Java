@@ -18,7 +18,7 @@ public class ClientService {
         return new ArrayList<>(Arrays.asList(split));
     }
 
-    public String parseLoginID(String line) {
+    public String parseLoginId(String line) {
         List<String> strings = lineSplit(line);
         if ((strings.size() == 2) && strings.contains("LOGIN") && redisService.isUsers(strings.get(1))) {
             return strings.get(1);
