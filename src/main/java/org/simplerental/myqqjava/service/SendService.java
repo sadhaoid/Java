@@ -29,6 +29,7 @@ public class SendService {
                 String responseMessage = clientService.handleResponseMessage(line,loginId);
                 if (!responseMessage.equals(ResponseMessage.Successful.getMessage()) ){
                     writer.println(responseMessage);
+                    continue;
                 } else {
                     writer.println(responseMessage);
                     friendId = lineSplit.get(1);
