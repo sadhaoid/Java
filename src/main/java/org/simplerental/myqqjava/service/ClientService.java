@@ -88,14 +88,14 @@ public class ClientService {
      * @param loginId 登录ID
      * @return 响应消息字符串
      */
-    public String handleResponseMessage(String line, String loginId) {
+    public ResponseMessage handleResponseMessage(String line, String loginId) {
         ResponseMessage responseMessage = validateChatTarget(line,loginId);
         switch (responseMessage) {
             case Successful, UseCorrectCommand, UserNotRegistered, UserNotFriend, UserNotOnline -> {
-                return responseMessage.getMessage();
+                return responseMessage;
             }
             default -> {
-                return ResponseMessage.UnknownError.getMessage();
+                return ResponseMessage.UnknownError;
             }
         }
     }

@@ -31,8 +31,8 @@ public class RedisService {
 
     }
 
-    public static boolean isPositiveInteger(String str) {
-        return str != null && str.matches("[0-9]\\d*");
+    private boolean isPositiveInteger(String str) {
+        return str != null && str.matches("[1-9]\\d*");
     }
 
     public boolean isUsers(String line) {

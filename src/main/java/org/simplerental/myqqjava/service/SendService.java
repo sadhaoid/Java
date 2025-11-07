@@ -1,7 +1,6 @@
 package org.simplerental.myqqjava.service;
 
 import lombok.RequiredArgsConstructor;
-import org.simplerental.myqqjava.config.ResponseMessage;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
@@ -18,6 +17,7 @@ import java.util.Map;
 public class SendService {
     private final ClientService clientService;
     private final ChatHistoryService chatHistoryService;
+    private final ChangeService changeService;
 
     /**
      * 处理发送消息请求
@@ -34,20 +34,14 @@ public class SendService {
         while((line = reader.readLine()) != null){
             List<String> lineSplit = clientService.lineSplit(line);
             String lineTrim = line.trim();
-            if ((lineTrim.equalsIgnoreCase("CHECK"))) {
-                clientService.handleOnlineFriends(loginId,writer);
-                continue;
-            } else if ((lineSplit.size() == 2) && (lineSplit.contains("CHANGE"))) {
-                String responseMessage = clientService.handleResponseMessage(line,loginId);
-                if (!responseMessage.equals(ResponseMessage.Successful.getMessage()) ){
-                    writer.println(responseMessage);
-                    continue;
-                } else {
-                    writer.println(responseMessage);
-                    friendId = lineSplit.get(1);
-                    continue;
+            if (((lineTrim.equalsIgnoreCase("CHECK"))) ||  ((lineSplit.size() == 2) && (lineSplit.contains("CHANGE")))){ // check change
+                String result = changeService.handleChangeReuqest(line,writer,loginId);
+                if (result != null){
+                    friendId = result;
                 }
+                continue;
             }
+
             clientService.sendMessageToFriend(line,loginId,friendId,userMap);
 
             chatHistoryService.storeChatHistory(line,friendId,loginId);

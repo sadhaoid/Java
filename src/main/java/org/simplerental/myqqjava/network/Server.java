@@ -1,5 +1,6 @@
 package org.simplerental.myqqjava.network;
 
+import lombok.RequiredArgsConstructor;
 import org.simplerental.myqqjava.service.ChangeService;
 import org.simplerental.myqqjava.service.LoginService;
 import org.simplerental.myqqjava.service.RedisService;
@@ -20,22 +21,17 @@ import java.util.concurrent.ConcurrentHashMap;
  * 每当有客户端连接时，启动一个线程异步处理该客户端的请求
  */
 @Component
+@RequiredArgsConstructor
 public class Server {
     public static final Map<String, PrintWriter> USER_MAP = new ConcurrentHashMap<>();
-    private final int port;
     private final LoginService loginService;
     private final RedisService redisService;
     private final ChangeService changeService;
     private final SendService sendService;
     private volatile boolean isRunning = true;
 
-    public Server(@Value("${tcp.server.port}") int port, LoginService loginService, RedisService redisService, ChangeService changeService, SendService sendService) {
-        this.port = port;
-        this.loginService = loginService;
-        this.redisService = redisService;
-        this.changeService = changeService;
-        this.sendService = sendService;
-    }
+    @Value("${tcp.server.port}")
+    private int port;
 
     public void initServer() throws IOException {
         try(ServerSocket serverSocket = new ServerSocket(port)) {

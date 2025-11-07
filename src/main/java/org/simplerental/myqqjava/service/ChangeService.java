@@ -29,18 +29,26 @@ public class ChangeService {
     public String processChangeRequest(String loginId, BufferedReader reader, PrintWriter writer) throws IOException {
         String line;
         while ((line = reader.readLine()) != null) {
+            String result = handleChangeReuqest(line,writer,loginId);
+            if (result != null){
+                return result;
+            }
 
-            String lineTrim = line.trim();
-            if ((lineTrim.equalsIgnoreCase("CHECK"))) {
-                clientService.handleOnlineFriends(loginId,writer);
-            } else {
-                String responseMessage = clientService.handleResponseMessage(line,loginId);
-                if (!responseMessage.equals(ResponseMessage.Successful.getMessage()) ){
-                    writer.println(responseMessage);
-                } else {
-                    writer.println(responseMessage);
-                    return clientService.lineSplit(line).get(1);
-                }
+
+        }
+        return null;
+    }
+
+    public String handleChangeReuqest(String line, PrintWriter writer, String loginId){
+        String lineTrim = line.trim();
+        if ((lineTrim.equalsIgnoreCase("CHECK"))) {
+            clientService.handleOnlineFriends(loginId,writer);
+            return null;
+        } else {
+            ResponseMessage responseMessage = clientService.handleResponseMessage(line,loginId);
+            writer.println(responseMessage.getMessage());
+             if (responseMessage == ResponseMessage.Successful){
+                return clientService.lineSplit(line).get(1);
             }
         }
         return null;
