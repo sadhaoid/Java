@@ -31,20 +31,29 @@ public class RedisService {
 
     }
 
-
-    public boolean isUsers(String line) {
-        if(line == null || line.isEmpty()){
-            return false;
-        }
-        return Boolean.TRUE.equals(redisTemplate.opsForSet().isMember(REDIS_KEY_USER_LIST, Long.valueOf(line)));
+    public static boolean isPositiveInteger(String str) {
+        return str != null && str.matches("[0-9]\\d*");
     }
 
-    public boolean isFriends(String loginId, String friendId){
-        return redisTemplate.opsForSet().isMember(REDIS_KEY_PREFIX_FRIEND_LIST+loginId, Long.valueOf(friendId));
+    public boolean isUsers(String line) {
+        if(isPositiveInteger(line)){
+            return redisTemplate.opsForSet().isMember(REDIS_KEY_USER_LIST, Long.valueOf(line));
+        }
+        return false;
+    }
+
+    public boolean isFriends(String loginId, String friendId) {
+        if (isPositiveInteger(friendId)) {
+            return redisTemplate.opsForSet().isMember(REDIS_KEY_PREFIX_FRIEND_LIST + loginId, Long.valueOf(friendId));
+        }
+        return false;
     }
 
     public boolean isLogin(String loginId){
-        return redisTemplate.opsForSet().isMember(REDIS_KEY_LOGIN_LIST, Long.valueOf(loginId));
+        if(isPositiveInteger(loginId)==false){
+            return redisTemplate.opsForSet().isMember(REDIS_KEY_LOGIN_LIST, Long.valueOf(loginId));
+        }
+        return false;
     }
 
     public void insertLoginIdToRedis(String loginID) {
